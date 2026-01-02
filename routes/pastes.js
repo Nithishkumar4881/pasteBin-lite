@@ -15,6 +15,16 @@ router.post('/pastes', async (req, res) => {
     res.status(500).json({ error: 'Failed to create paste', details: err.message });
   } 
 });
+
+router.get('/paste', async (req, res)=>{
+
+  const paste = await Paste.find();
+  console.log(paste);
+  res.send(paste)
+  
+
+})
+
 router.get('/pastes/:id', async (req, res) => {
   const { id } = req.params;
     try {
