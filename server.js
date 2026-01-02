@@ -10,15 +10,12 @@ const pasteRoutes = require('./routes/pastes');
 
 app.use(express.json());
 app.use(cors());
-app.use('/api', pasteRoutes);
-
-
 mongoose.connect(process.env.MONGO_URI).then(() => {
   console.log('Connected to MongoDB');
 }).catch(err => {
   console.error('MongoDB connection error:', err);
 });
-
+app.use('/api', pasteRoutes);
 app.get('/p/:id', (req, res) => {
     
     const paste = Paste.findById(req.params.id);

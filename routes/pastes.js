@@ -40,7 +40,7 @@ router.get('/pastes/:id', async (req, res) => {
     res.status(200).json({ content:paste.content, viewsLeft: paste.maxViews !== null ? paste.maxViews - paste.viewCount : 'unlimited', expiresAt: paste.expiresAt?new Date(paste.expiresAt):"never expired" });
 }
      catch (err) {
-    res.status(500).json({ d:err.message });
+    res.status(500).json({ d:err });
   }     
 
 });
