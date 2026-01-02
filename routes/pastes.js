@@ -6,6 +6,9 @@ app.use(express.json());
 router.post('/pastes', async (req, res) => {
   try {
     const { content, expiresAt, maxViews } = req.body;
+    if(!content){
+      res.send({msg:"Kindly provide your content!"})
+    }
     const paste = new Paste({ content,
         expiresAt: expiresAt ? Date.now() + expiresAt * 1000 : null,
         maxViews });
@@ -20,7 +23,7 @@ router.get('/paste', async (req, res)=>{
 
   const paste = await Paste.find();
   console.log(paste);
-  res.send(paste)
+  res.status(200).send(paste);
   
 
 })
