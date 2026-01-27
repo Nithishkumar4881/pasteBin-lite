@@ -10,7 +10,7 @@ const pasteRoutes = require('./routes/pastes');
 
 app.use(express.json());
 app.use(cors());
-mongoose.connect(`mongodb://localhost:27017/errdb`).then(() => {
+mongoose.connect(`${process.env.MONGO_URI}pastebin`).then(() => {
   console.log('Connected to MongoDB');
 }).catch(err => {
   console.log('MongoDB connection error:', err.message);
