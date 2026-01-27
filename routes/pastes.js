@@ -15,7 +15,7 @@ router.post('/pastes', async (req, res) => {
       maxViews
     });
     await paste.save();
-    res.status(201).json({ content: paste.content, url: `http://localhost:3000/api/pastes/${paste._id}` });
+    res.status(201).json({ content: paste.content, url: `https://paste-bin-lite-iota.vercel.app/api/pastes/${paste._id}` });
   } catch (err) {
     res.status(500).json({ error: 'Failed to create paste', details: err.message });
   }
