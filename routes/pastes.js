@@ -49,7 +49,7 @@ router.get('/pastes/:id', async (req, res) => {
        //return res.status(404).json({ error: 'Paste has reached maximum views' });
        return res.header({"contetn-type":"HTML"}).send(`<html>
       <head><title>Content</title></head>
-      <body><div><h1>Your Content: <span style="color:red">${err.message}</span></h1></div>
+      <body><div><h1>Error: <span style="color:red">Paste has reached maximum views</span></h1></div>
             </body>
 
     </html>`);
