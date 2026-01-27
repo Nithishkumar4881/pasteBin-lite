@@ -46,7 +46,13 @@ router.get('/pastes/:id', async (req, res) => {
     // Check for max views
     if (paste.maxViews !== null) {
       if (paste.viewCount >= paste.maxViews) {
-        return res.status(404).json({ error: 'Paste has reached maximum views' });
+       //return res.status(404).json({ error: 'Paste has reached maximum views' });
+       return res.header({"contetn-type":"HTML"}).send(`<html>
+      <head><title>Content</title></head>
+      <body><div><h1>Your Content: <span style="color:red">${err.message}</span></h1></div>
+            </body>
+
+    </html>`);
       }
     }
     // Increment view count
@@ -63,7 +69,12 @@ router.get('/pastes/:id', async (req, res) => {
     </html>`)
   }
   catch (err) {
-    res.status(500).json({ d: err });
+    res.header({"contetn-type":"HTML"}).send(`<html>
+      <head><title>Content</title></head>
+      <body><div><h1>Your Content: <span style="color:red">${err.message}</span></h1></div>
+            </body>
+
+    </html>`)
   }
 });
 
