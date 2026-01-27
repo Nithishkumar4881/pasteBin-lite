@@ -6,31 +6,33 @@ app.use(express.json());
 router.post('/pastes', async (req, res) => {
   try {
     const { content, expiresAt, maxViews } = req.body;
-    if(!content){
-      res.send({msg:"Kindly provide your content!"})
+    if (!content) {
+      res.send({ msg: "Kindly provide your content!" })
     }
-    const paste = new Paste({ content,
-        expiresAt: expiresAt ? Date.now() + expiresAt * 1000 : null,
-        maxViews });
+    const paste = new Paste({
+      content,
+      expiresAt: expiresAt ? Date.now() + expiresAt * 1000 : null,
+      maxViews
+    });
     await paste.save();
-    res.status(201).json({content: paste.content, url: `https://paste-bin-lite-iota.vercel.app/api/pastes/${paste._id}`});
+    res.status(201).json({ content: paste.content, url: `http://localhost:3000/api/pastes/${paste._id}` });
   } catch (err) {
     res.status(500).json({ error: 'Failed to create paste', details: err.message });
-  } 
+  }
 });
 
-router.get('/paste', async (req, res)=>{
+router.get('/paste', async (req, res) => {
 
   const paste = await Paste.find();
   console.log(paste);
   res.status(200).send(paste);
-  
+
 
 })
 
 router.get('/pastes/:id', async (req, res) => {
   const { id } = req.params;
-    try {
+  try {
     const paste = await Paste.findById(id);
     if (!paste) {
       return res.status(404).json({ error: 'Paste not found' });
@@ -49,17 +51,24 @@ router.get('/pastes/:id', async (req, res) => {
     }
     // Increment view count
     paste.viewCount += 1;
-    await paste.save();
-    res.status(200).json({ content:paste.content, viewsLeft: paste.maxViews !== null ? paste.maxViews - paste.viewCount : 'unlimited', expiresAt: paste.expiresAt?new Date(paste.expiresAt):"never expired" });
-}
-     catch (err) {
-    res.status(500).json({ d:err });
-  }     
+    await paste.save();    
+    //  res.status(200).json({ content: paste.content, viewsLeft: paste.maxViews !== null ? paste.maxViews - paste.viewCount : 'unlimited', expiresAt: paste.expiresAt ? new Date(paste.expiresAt) : "never expired" });
+    res.header({"contetn-type":"HTML"}).send(`<html>
+      <head><title>Content</title></head>
+      <body><div><h1>Your Content: <span style="color:green">${paste.content}</span></h1></div>
+            <div><h1>Views Left: <span style="color:green">${paste.maxViews !== null ? paste.maxViews - paste.viewCount : 'unlimited'}</span></h1></div>
+            <div><h1>Expires At: <span style="color:green">${paste.expiresAt ? new Date(paste.expiresAt) : "never expired"}</span></h1></div>
+      </body>
 
+    </html>`)
+  }
+  catch (err) {
+    res.status(500).json({ d: err });
+  }
 });
 
-router.get('/health',(req, res)=>{
-    res.status(200).send({ok:true});
+router.get('/health', (req, res) => {
+  res.status(200).send({ ok: true });
 })
 
 module.exports = router;
